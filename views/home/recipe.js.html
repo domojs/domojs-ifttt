@@ -1,0 +1,159 @@
+@!(model)
+<link rel="stylesheet" href="/assets/css/jquery-ui.css" />
+<style>
+    h1 input,
+    h2 input,
+    h3 input,
+    h4 input,
+    h5 input,
+    h6 input
+    {
+        border-width:0px;
+    }
+     
+    h1 .glyphicon,
+    h2 .glyphicon,
+    h3 .glyphicon,
+    h4 .glyphicon,
+    h5 .glyphicon,
+    h6 .glyphicon
+    {
+        line-height:30px;
+    }
+     
+    .parameters .label
+    {
+        color:black !important;
+        text-align:left;
+        padding-left:20px;
+    }
+    
+    .trigger,
+    .action,
+    .buttons
+    {
+        background-color:white;
+        margin-top:10px;
+        padding-bottom:10px;
+        padding-top:10px;
+    }
+     
+</style>
+<h1><input class="col-md-12" type="text" id="recipeName" value="@model.name" /></h1>
+<div class="trigger col-md-12">
+    <h4><label for="trigger" class="glyphicon glyphicon-flash pull-left"></label><input type="text" class="col-md-11" id="trigger" value="@model.trigger.name" /><br /><small class="row clearfix">@model.trigger.path</small></h4>
+    <div class="parameters"></div>
+</div>
+<div class="action col-md-12">
+    <h4><label for="action" class="glyphicon glyphicon-cog pull-left"></label><input type="text" class="col-md-11" id="action" value="@model.action.name" /><br /><small class="row clearfix">@model.action.path</small></h4>
+    <div class="parameters"></div>
+</div>
+<div class="col-md-12 buttons">
+    <a href="#ifttt" class="btn btn-primary">Save</a> 
+    <a href="#ifttt" class="btn btn-default">Cancel</a> 
+    <a href="#ifttt" class="btn btn-danger pull-right">Remove</a> 
+</div>
+<script>
+    var model=@JSON.stringify(model);
+    
+    function getParameters(item, path, name){
+        $.getJSON('/api/ifttt/'+item+'/'+path+','+encodeURIComponent(name), function(fields)
+        {
+            var ul=$('<ul class="list-unstyled" />');
+            var container=$('div:has(> h4 > #'+item+') .parameters').empty().append('<h5>Parameters</h5>').append(ul);
+            $.each(fields, function(index, field){
+                var li=$('<li class="row">')
+                        .appendTo(ul)
+                        .append('<div class="col-md-offset-1 col-md-3"><span class="label">'+field.name+'</span><br /><small class="col-md-offset-1">'+field.displayName+'</small></div>')
+                        .append('<input type="text" class="col-md-5" name="'+field.name+'" />');
+                if(typeof(model[item].params[field.name])!='undefined')
+                {
+                    if(typeof(model[item].params[field.name])=='object')
+                        li.find('input').val(JSON.stringify(model[item].params[field.name]));
+                    else
+                        li.find('input').val(model[item].params[field.name]);
+                }
+            });
+        });
+    }
+     
+    getParameters('trigger', model.trigger.path, model.trigger.name);
+    getParameters('action', model.action.path, model.action.name);
+    
+    $('#trigger').autocomplete({
+        autoFocus:true,
+        source:'/api/ifttt/items/triggers',
+        focus:function(){
+            return false;
+        },
+        select:function(ev, ui){
+            $('#trigger').val(ui.item.name);
+            $('h4:has(#trigger) small').text(ui.item.path);
+            ui.item.value=ui.item.name;
+            getParameters('trigger', ui.item.path, ui.item.name);
+        }
+        }).autocomplete('instance')._renderItem=function(ul,item){
+        if(item)
+        {
+            return $( "<li>" )
+                .append( "<a>" + item.name + "<br><small>" + item.path + "</small></a>" )
+                .appendTo( ul );
+        }
+    }
+     
+    $('#action').autocomplete({
+        autoFocus:true,
+        source:'/api/ifttt/items/actions',
+        focus:function(){
+            return false;
+        },
+        select:function(ev, ui){
+            $('#action').val(ui.item.name);
+            $('h4:has(#action) small').text(ui.item.path);
+            ui.item.value=ui.item.name;
+            getParameters('action', ui.item.path, ui.item.name);
+        }
+    }).autocomplete('instance')._renderItem=function(ul,item){
+        if(item)
+        {
+            return $( "<li>" )
+                .append( "<a>" + item.name + "<br><small>" + item.path + "</small></a>" )
+                .appendTo( ul );
+        }
+    }
+     
+    $('.btn-primary').on('click', function(){
+        debugger;
+        var data={
+            name:$('h1 input#recipeName').val(), 
+            trigger:{
+                name:$('.trigger h4 input').val(), 
+                path:$('.trigger h4 small').text(),
+                params:{}
+            },
+            action:{
+                name:$('.action h4 input').val(),
+                path:$('.action h4 small').text(),
+                params:{}
+            }
+        };
+        $('.trigger .parameters input').each(function(index, item){
+            data.trigger.params[item.name]=$(item).val();
+        });
+        $('.action .parameters input').each(function(index, item){
+            data.action.params[item.name]=$(item).val();
+        });
+        $.ajax({type:'post', url:'/api/ifttt/recipe/'+model.name, data:JSON.stringify(data), contentType:'application/json', success:function(){
+            $.gritter.add('recipe '+model.name+' saved')
+        }});
+        return false;
+    });
+     
+    $('.btn-danger').on('click', function(){
+        $.ajax({type:'delete', url:'/api/ifttt/'+model.name, success:function(){
+            window.location='#ifttt';
+        }});
+        return false;
+    });
+     
+ </script>

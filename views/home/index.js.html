@@ -1,0 +1,26 @@
+@!(model) 
+@for(var recipe in model)
+{
+    @if(recipe%6==0)
+    {
+        <div class="clearfix"></div>
+    }
+    <div class="col-md-2" style="background-color:white; box-sizing:border-box; border:5px solid #e8e8e8; height:250px; overflow:hidden">
+        <h3><a href="#ifttt/@(model[recipe].name)">@(model[recipe].name)</a></h3>
+        <div class="col-md-1">
+            @if(model[recipe].trigger)
+            {
+                <h4>@(model[recipe].trigger.name)</h4>
+                <small>@(model[recipe].trigger.path)</small>
+            }
+        </div>
+    </div>
+    
+}
+@if(model.length%6==0)
+{
+    <div class="clearfix"></div>
+}
+<div class="col-md-2" style="background-color:white; box-sizing:border-box; border:5px solid #e8e8e8; height:250px; overflow:hidden">
+    <h3><a href="#ifttt/_new">New recipe</a></h3>
+</div>
