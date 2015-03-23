@@ -3,7 +3,7 @@ module.exports={
 	{
 		if(typeof(id)=='undefined')
 		{
-		    $('fs').readFile('./ifttt/recipes.json', function(err, data){
+		    $('fs').readFile('./lifttt/recipes.json', function(err, data){
 		        if(err)
 		            console.log(err);
 	            callback(JSON.parse(data));
@@ -22,7 +22,7 @@ module.exports={
 	items:function(id, term, callback)
 	{
         var result=[];
-        $('fs').readdir('./ifttt/modules', function(err, files){
+        $('fs').readdir('./lifttt/modules', function(err, files){
            $.eachAsync(files, function(index, item, next){
                var path='./ifttt/modules/'+item;
                var moduleFileName=item;
@@ -86,7 +86,7 @@ module.exports={
 	{
         var ids=id.split(',');
         console.log(ids);
-        $('fs').realpath('./ifttt/modules/'+ids[0], function(err, resolvedPath)
+        $('fs').realpath('./lifttt/modules/'+ids[0], function(err, resolvedPath)
         {
             var found=false;
             if(err)
