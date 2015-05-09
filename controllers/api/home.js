@@ -57,7 +57,6 @@ module.exports={
 	trigger:function(id, callback)
 	{
         var ids=id.split(',');
-        console.log(ids);
         $('fs').realpath('./ifttt/modules/'+ids[0], function(err, resolvedPath)
         {
             var found=false;
@@ -85,7 +84,6 @@ module.exports={
 	action:function(id, callback)
 	{
         var ids=id.split(',');
-        console.log(ids);
         $('fs').realpath('./lifttt/modules/'+ids[0], function(err, resolvedPath)
         {
             var found=false;
@@ -153,5 +151,18 @@ module.exports={
                     callback(200);
             });
         });
+	},
+	control:function(id, value, callback){
+        switch(id)
+        {
+            case 'restart':
+            case 'mode':
+                $.io.emit('ifttt', {cmd:id, params:value});
+                callback(200);
+                break;
+            default:
+                callback(404);
+        }
 	}
 };
+

@@ -6,8 +6,19 @@
         <div class="clearfix"></div>
     }
     <div class="col-md-2" style="background-color:white; box-sizing:border-box; border:5px solid #e8e8e8; height:250px; overflow:hidden">
-        <h3><a href="#ifttt/@(model[recipe].name)">@(model[recipe].name)</a></h3>
-        <div class="col-md-1">
+        <h3>
+            
+            @if(model[recipe].disabled)
+            {
+                <span class="text-danger glyphicon glyphicon-remove"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-ok"></span>
+            }
+            <a href="#ifttt/@(model[recipe].name)">@(model[recipe].name)</a>
+        </h3>
+        <div class="col-md-12">
             @if(model[recipe].trigger)
             {
                 <h4>@(model[recipe].trigger.name)</h4>
