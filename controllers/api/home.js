@@ -24,7 +24,7 @@ module.exports={
         var result=[];
         $('fs').readdir('./lifttt/modules', function(err, files){
            $.eachAsync(files, function(index, item, next){
-               var path='./ifttt/modules/'+item;
+               var path='./lifttt/modules/'+item;
                var moduleFileName=item;
                $('fs').realpath(path, function(err, resolvedPath)
                {
@@ -124,7 +124,7 @@ module.exports={
                 recipes.push(recipe={});
             }
             $.extend(recipe, body);
-            $('fs').writeFile('./ifttt/recipes.json', JSON.stringify(recipes), function(err){
+            $('fs').writeFile('./lifttt/recipes.json', JSON.stringify(recipes), function(err){
                 if(err)
                 {
                     console.log(err);
@@ -141,7 +141,7 @@ module.exports={
             if(!recipe)
                 callback(404);
             recipes.splice(recipes.indexOf(recipe), 1);
-            $('fs').writeFile('./ifttt/recipes.json', JSON.stringify(recipes), function(err){
+            $('fs').writeFile('./lifttt/recipes.json', JSON.stringify(recipes), function(err){
                 if(err)
                 {
                     console.log(err);
