@@ -57,7 +57,7 @@ module.exports={
 	trigger:function(id, callback)
 	{
         var ids=id.split(',');
-        $('fs').realpath('./ifttt/modules/'+ids[0], function(err, resolvedPath)
+        $('fs').realpath('./lifttt/modules/'+ids[0], function(err, resolvedPath)
         {
             var found=false;
             if(err)
@@ -153,6 +153,8 @@ module.exports={
         });
 	},
 	control:function(id, value, callback){
+	    console.log(id);
+	    console.log(value);
         switch(id)
         {
             case 'restart':
