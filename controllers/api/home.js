@@ -124,7 +124,7 @@ module.exports={
                 recipes.push(recipe={});
             }
             $.extend(recipe, body);
-            $('fs').writeFile('./lifttt/recipes.json', JSON.stringify(recipes), function(err){
+            $('fs').writeFile('./lifttt/recipes.json', JSON.stringify(recipes, null, 4), function(err){
                 if(err)
                 {
                     console.log(err);
