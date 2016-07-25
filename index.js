@@ -9,7 +9,7 @@ exports.init=function(config){
         type:'virtualState',
 states:config}, function(device){
         device.on('status', function(state){
-            $.emit('ifttt', {"function":"mode", "params":state})
+            $.emit('ifttt', {"cmd":"mode", "params":state})
         })
     });
 };

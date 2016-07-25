@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": [
+        {
+            "properties": {
+                "name":{"type":"string"},
+                "disabled":{"type": "boolean"},
+                "trigger": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string"
+                        },
+                        "params": {
+                            "type": "object"
+                        }
+                    }
+                },
+                
+                "condition":{
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string"
+                        },
+                        "params": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "action":{
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "path": {
+                            "type": "string"
+                        },
+                        "params": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
